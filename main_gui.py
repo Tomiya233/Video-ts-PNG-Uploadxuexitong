@@ -40,12 +40,14 @@ find_mp4 = tk.Button(main, text="选择mp4文件", command=mp4_path_get).place(x
 
 def gogogo():
     if ffmpeg_path_input.get() == "":
-        tkinter.messagebox.showwarning(title='Hi', message='ffmpeg路径未输入')
+        tkinter.messagebox.showwarning(title='!', message='ffmpeg路径未输入')
         return
     if mp4_path_input.get() == "":
-        tkinter.messagebox.showwarning(title='Hi', message='mp4路径未输入')
+        tkinter.messagebox.showwarning(title='!', message='mp4路径未输入')
         return
-
+    if mp4_path_input.get()[-3:].lower()==".mp4":
+        tkinter.messagebox.showerror(title='!', message='请选择mp4格式的视频')
+        return
     tstime = 10
     # 标准mp4转TS格式------------------------------------------------------------------------------
     cmd_str = f'"{ffmpeg_path_input.get()}" -y -i {mp4_path_input.get()} -vcodec copy -acodec copy -vbsf h264_mp4toannexb temp.ts'

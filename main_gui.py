@@ -48,7 +48,7 @@ def gogogo():
     if mp4_path_input.get()[-3:].lower()==".mp4":
         tkinter.messagebox.showerror(title='!', message='请选择mp4格式的视频')
         return
-    tstime = 10
+    tstime = 30
     # 标准mp4转TS格式------------------------------------------------------------------------------
     cmd_str = f'"{ffmpeg_path_input.get()}" -y -i {mp4_path_input.get()} -vcodec copy -acodec copy -vbsf h264_mp4toannexb temp.ts'
     subprocess.run(cmd_str, encoding="utf-8", shell=True)

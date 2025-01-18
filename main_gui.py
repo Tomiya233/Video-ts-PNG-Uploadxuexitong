@@ -7,27 +7,59 @@ import shutil
 from shutil import copyfile
 import json
 import tkinter.messagebox
+from pathlib import Path
 
 main = tk.Tk()
 main.title("视频切片并伪装png上传图床")
 main.geometry("500x400")
 main.resizable(False, False)
+ffmpeg_path = tk.StringVar()
+mp4_path = tk.StringVar()
 
+file_path = Path('config.json')
+
+if file_path.exists():
+    try:
+        with open("config.json", 'r',encoding='utf-8') as config:
+            data = json.loads(config.read())
+            ffmpeg_path.set(data["ffmpeg_path"])
+    except:
+        print("读取配置文件失败")
+
+else:
+    print("未找到config配置文件")
 
 news= tk.Label(main, text="请先选择FFMPEG路径与mp4路径",font=(12),width=30,height=2).pack()
 
-ffmpeg_path = tk.StringVar()
 
 def ffmpeg_path_get():
     ffmpeg_path_path = filedialog.askopenfilename()
-    ffmpeg_path.set(ffmpeg_path_path)
+    if "ffmpeg" in ffmpeg_path_path:
+        ffmpeg_path.set(ffmpeg_path_path)
+        config_data = {
+            "ffmpeg_path": ffmpeg_path_path  # 假设 ffmpeg_path_path 是你想要保存的路径
+        }
+        with open('config.json', 'w', encoding='utf-8') as config_file:
+            json.dump(config_data, config_file, ensure_ascii=False, indent=4)
+    else:
+        if "FFMPEG" in ffmpeg_path_path:
+            ffmpeg_path.set(ffmpeg_path_path)
+            config_data = {
+                "ffmpeg_path": ffmpeg_path_path  # 假设 ffmpeg_path_path 是你想要保存的路径
+            }
+            with open('config.json', 'w', encoding='utf-8') as config_file:
+                json.dump(config_data, config_file, ensure_ascii=False, indent=4)
+
+        else:
+            tkinter.messagebox.showwarning(title='!', message='请选择ffmpeg.exe')
+
 
 ffmpeg_path_input = tk.Entry(main,textvariable=ffmpeg_path, show=None, font=('Arial', 8))
 ffmpeg_path_input.place(x=100, y=50,width=220,height=26)
 tk.Label(main, text='FFmpeg路径', font=('Arial', 10)).place(x=10, y=50)
 find_ffmpeg = tk.Button(main, text="选择ffmpeg.exe", command=ffmpeg_path_get).place(x=330,y=47)
 
-mp4_path = tk.StringVar()
+
 def mp4_path_get():
     mp4_path_path = filedialog.askopenfilename()
     mp4_path.set(mp4_path_path)

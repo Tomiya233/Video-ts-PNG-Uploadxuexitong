@@ -8,7 +8,7 @@ from shutil import copyfile
 import json
 import tkinter.messagebox
 from pathlib import Path
-
+ 
 main = tk.Tk()
 main.title("视频切片并伪装png上传图床")
 main.geometry("500x400")
